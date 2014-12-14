@@ -1195,4 +1195,8 @@
     <!-- Default alarm ringtone -->
     <string name="alarm_ringtone_title">Default alarm ringtone</string>
 
+    <!-- Weather in status bar -->
+    <string name="status_bar_show_weather_title">Show weather</string>
+    <string name="status_bar_show_weather_summary">Show the weather above the Quick Settings panel</string>
+
 </resources>
