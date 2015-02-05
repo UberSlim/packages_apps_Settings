@@ -1144,4 +1144,8 @@
     <string name="autoperf_title">Enable per-app profiles</string>
     <string name="autoperf_summary">Automatically choose an appropriate performance profile for various applications</string>
 
+    <!-- Captive Portal -->
+    <string name="captive_portal_detection">Captive portal detection</string>
+    <string name="captive_portal_detection_summary">If disabled, a connection to google servers is not required in order to detect data connection.</string>
+
 </resources>
