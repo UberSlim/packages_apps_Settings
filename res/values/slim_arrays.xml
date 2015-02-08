@@ -981,6 +981,7 @@
         <item>2</item>
     </string-array>
 
+<<<<<<< HEAD
     <!-- Volume step options. -->
     <string-array name="volume_steps_entries" translatable="false">
         <item>@string/volume_steps_60</item>
@@ -1125,6 +1126,29 @@
         <item>11</item>
         <item>12</item>
         <item>13</item>
+    </string-array>
+
+    <!-- Slim's Global Reboot Menu -->
+    <string-array name="shortcut_action_power_menu_entries">
+        <item>@string/shortcut_action_airplane</item>
+        <item>@string/shortcut_action_app</item>
+        <item>@string/shortcut_action_power_off</item>
+        <item>@string/shortcut_action_reboot</item>
+        <item>@string/shortcut_action_screenshot</item>
+        <item>@string/shortcut_action_sound</item>
+        <item>@string/shortcut_action_users</item>
+        <item>@string/shortcut_action_lockdown</item>
+    </string-array>
+
+    <string-array name="shortcut_action_power_menu_values" translatable="false">
+        <item>**airplane**</item>
+        <item>**app**</item>
+        <item>**poweroff**</item>
+        <item>**reboot**</item>
+        <item>**screenshot**</item>
+        <item>**sound**</item>
+        <item>**users**</item>
+        <item>**lockdown**</item>
     </string-array>
 
 </resources>
