@@ -1207,4 +1207,7 @@
     <!-- Default alarm ringtone -->
     <string name="alarm_ringtone_title">Default alarm ringtone</string>
 
+    <!-- SIM -->
+    <string name="sim_no_number_set">No number assigned</string>
+
 </resources>
