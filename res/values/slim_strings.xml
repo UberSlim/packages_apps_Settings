@@ -1313,4 +1313,8 @@
     <string name="navigation_save_button_text">Save</string>
     <string name="navigation_bar_reset_message">Delete current settings and restore the default layout?</string>
 
+    <!-- Zen Mode -->
+    <string name="zen_mode_none_category">No interruptions</string>
+    <string name="allow_lights_title">Allow notification lights</string>
+
 </resources>
