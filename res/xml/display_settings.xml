@@ -147,6 +147,6 @@
                 android:key="advanced_doze_options"
                 android:title="@string/doze_settings_title"
                 android:dependency="doze" />
+</PreferenceCategory>
 
-        </PreferenceCategory>
 </PreferenceScreen>
