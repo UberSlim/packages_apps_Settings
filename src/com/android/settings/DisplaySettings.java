@@ -671,26 +671,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         return false;
     }
 
-    private int getMinimumDensity() {
-        int defaultDensity = DisplayMetrics.DENSITY_DEVICE;
-        int factor = defaultDensity >= 480 ? 40 : 20;
-        return defaultDensity - 4 * factor;
-    }
-
-    private int getMaxmimumDensity() {
-        int defaultDensity = DisplayMetrics.DENSITY_DEVICE;
-        int factor = defaultDensity >= 480 ? 40 : 20;
-        return defaultDensity + 4 * factor;
-    }
-
-    private boolean isPostProcessingSupported() {
-        boolean ret = true;
-        final PackageManager pm = getPackageManager();
-        try {
-            pm.getPackageInfo("com.qualcomm.display", PackageManager.GET_META_DATA);
-        } catch (NameNotFoundException e) {
-            ret = false;
-
 
     /**
      * Restore the properties associated with this preference on boot
@@ -712,6 +692,18 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             }
     
         }
+    }
+
+    private int getMinimumDensity() {
+        int defaultDensity = DisplayMetrics.DENSITY_DEVICE;
+        int factor = defaultDensity >= 480 ? 40 : 20;
+        return defaultDensity - 4 * factor;
+    }
+
+    private int getMaxmimumDensity() {
+        int defaultDensity = DisplayMetrics.DENSITY_DEVICE;
+        int factor = defaultDensity >= 480 ? 40 : 20;
+        return defaultDensity + 4 * factor;
     }
 
     public static final Indexable.SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
