@@ -1040,12 +1040,8 @@
     <string name="category_calibration">Calibration</string>
     <!-- Display settings.  Screen color. -->
     <string name="screencolor">Screen color</string>
-<<<<<<< HEAD
     <string name="screencolor_summary">Tune screen hue, saturation, contrast or intensity</string>
     <string name="custom_screencolor">Custom screen color</string>
-=======
-<string name="screencolor_summary">Tune screen Hue, Saturation, Contrast and Intensity</string>    <string name="custom_screencolor">Custom screen color</string>
->>>>>>> 042e91c... AddNetworkTraffic
     <string name="screencolor_save">Save</string>
     <string name="screencolor_cancel">Cancel</string>
     <string name="restore_preview">View default picture</string>
@@ -1246,9 +1242,27 @@
     <string name="show_network_traffic_2000">2000 ms</string>
     <string name="network_traffic_autohide">Auto hide</string>
     <string name="network_traffic_autohide_summary">Hide the traffic monitor when there is no activity</string>
- <string name="network_traffic_autohide_threshold">Inactivity threshold</string>
+    <string name="network_traffic_autohide_threshold">Inactivity threshold</string>
     <string name="network_traffic_color_style">Color style</string>
     <string name="network_traffic_color_reset">Reset color</string>
     <string name="network_traffic_color_reset_message">Reset network traffic color to default?</string>
+
+<!-- Toast animations -->
+    <string name="toast_animation_title">Toast animations</string>
+    <string name="toast_animation_summary">Select and preview system toast animation</string>
+    <string name="toast_none_animation">None</string>
+    <string name="toast_default_animation">Default</string>
+    <string name="toast_fade_animation">Fade animation</string>
+    <string name="toast_SlideRight_animation">Slide right</string>
+    <string name="toast_SlideLeft_animation">Slide left</string>
+    <string name="toast_Xylon_animation">Xylon animation</string>
+    <string name="toast_Toko_animation">Toko animation</string>
+    <string name="toast_Tn_animation">Tn animation</string>
+    <string name="toast_Honami_animation">Honami animation</string>
+    <string name="toast_FastFade_animation">Fast fade</string>
+    <string name="toast_GrowFade_animation">Grow fade</string>
+    <string name="toast_GrowFadeCenter_animation">Grow fade center</string>
+    <string name="toast_GrowFadeBottom_animation">Grow fade bottom</string>
+    <string name="toast_Translucent_animation">Translucent animation</string>
 
 </resources>
