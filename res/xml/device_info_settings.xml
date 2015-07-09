@@ -21,6 +21,11 @@
                           android:enabled="false"
                           android:layout="@layout/slim_logo_row" />
 
+	<!-- Changelog -->
+        <PreferenceScreen android:key="changelog"
+                android:title="@string/changelog_uberslim_title"
+                android:fragment="com.android.settings.slim.Changelog" />
+
         <!-- Device status - launches activity -->
         <PreferenceScreen android:key="status_info"
                 android:title="@string/device_status" 
