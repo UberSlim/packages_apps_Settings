@@ -1106,9 +1106,6 @@
     <string name="show_unac_and_overcounted_stats_title">Show unaccounted/overcounted stats</string>
     <string name="show_unac_and_overcounted_stats_summary">Show in battery statistics unaccounted and over-counted usage.</string>
 
-    <!-- Viper4Android -->
-    <string name="viper_title">Viper4Android</string>
-
     <!-- Advanced settings  -->
     <string name="advanced_settings_title">Advanced</string>
     <string name="tweak_category_title">Tweak</string>
