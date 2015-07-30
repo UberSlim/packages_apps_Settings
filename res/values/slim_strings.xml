@@ -1040,12 +1040,8 @@
     <string name="category_calibration">Calibration</string>
     <!-- Display settings.  Screen color. -->
     <string name="screencolor">Screen color</string>
-<<<<<<< HEAD
     <string name="screencolor_summary">Tune screen hue, saturation, contrast or intensity</string>
     <string name="custom_screencolor">Custom screen color</string>
-=======
-<string name="screencolor_summary">Tune screen Hue, Saturation, Contrast and Intensity</string>    <string name="custom_screencolor">Custom screen color</string>
->>>>>>> 042e91c... AddNetworkTraffic
     <string name="screencolor_save">Save</string>
     <string name="screencolor_cancel">Cancel</string>
     <string name="restore_preview">View default picture</string>
