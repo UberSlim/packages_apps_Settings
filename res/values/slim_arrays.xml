@@ -981,7 +981,6 @@
         <item>2</item>
     </string-array>
 
-<<<<<<< HEAD
     <!-- Volume step options. -->
     <string-array name="volume_steps_entries" translatable="false">
         <item>@string/volume_steps_60</item>
