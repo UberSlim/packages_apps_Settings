@@ -34,22 +34,15 @@
         android:fragment="com.android.settings.slim.RecentPanel"
         android:title="@string/recent_panel_category" />
 
-   <PreferenceScreen
-        android:key="expanded_desktop"
-        android:title="@string/power_menu_expanded_desktop"
-        android:fragment="com.android.settings.applications.ExpandedDesktopPreferenceFragment" />
-
-        <ListPreference
-                android:key="toast_animation"
-                android:title="@string/toast_animation_title"
-                android:entries="@array/toast_animation_entries"
-                android:entryValues="@array/toast_animation_values"
-                android:persistent="false" />
-
       <!--   <PreferenceScreen
             android:key="network_traffic_state"
             android:fragment="com.android.settings.simpleaosp.NetworkTraffic"
             android:summary="@string/network_traffic_summary"
             android:title="@string/network_traffic_title" />-->
+
+    <PreferenceScreen
+        android:key="expanded_desktop"
+        android:title="@string/power_menu_expanded_desktop"
+        android:fragment="com.android.settings.applications.ExpandedDesktopPreferenceFragment" />
 
 </PreferenceScreen>
