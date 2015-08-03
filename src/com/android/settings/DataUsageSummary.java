@@ -88,6 +88,7 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.preference.Preference;
+import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -584,12 +585,12 @@ public class DataUsageSummary extends HighlightingFragment implements Indexable 
             case R.id.data_usage_menu_cellular_networks: {
                 final Intent intent = new Intent(Intent.ACTION_MAIN);
                 if (TelephonyManager.getDefault().getPhoneCount() > 1) {
-                    intent.setClassName("com.android.phone",
-                            "com.android.phone.SelectSubscription");
+                    intent.setClassName("com.android.phone","com.android.phone.msim.SelectSubscription");
                     intent.putExtra(SelectSubscription.PACKAGE,
                              "com.android.phone");
                     intent.putExtra(SelectSubscription.TARGET_CLASS,
-                            "com.android.phone.MSimMobileNetworkSubSettings");
+                            "com.android.phone.MobileNetworkSettings");
+                    intent.putExtra("TARGET_THEME", "Theme.Material.Settings");
                 } else {
                     intent.setComponent(new ComponentName("com.android.phone",
                             "com.android.phone.MobileNetworkSettings"));
@@ -768,6 +769,17 @@ public class DataUsageSummary extends HighlightingFragment implements Indexable 
             for (int i = 0; i < TelephonyManager.getDefault()
                     .getPhoneCount(); i++) {
                 if (currentTab.equals(getSubTag(i+1))) {
+                    if (TelephonyManager.getDefault().getMultiSimConfiguration() ==
+                            TelephonyManager.MultiSimVariants.DSDS ||
+                            TelephonyManager.getDefault().getMultiSimConfiguration() ==
+                            TelephonyManager.MultiSimVariants.TSTS) {
+                        // only one of the SIMs can have Data enabled, so...
+                        if (SubscriptionManager.from(context).getDefaultDataPhoneId() == i) {
+                            mDataEnabledView.setVisibility(View.VISIBLE);
+                        } else {
+                            mDataEnabledView.setVisibility(View.GONE);
+                        }
+                    }
                     setPreferenceTitle(mDataEnabledView,
                             R.string.data_usage_enable_mobile);
                     setPreferenceTitle(mDisableAtLimitView,
@@ -1023,6 +1035,17 @@ public class DataUsageSummary extends HighlightingFragment implements Indexable 
     private void updatePolicy(boolean refreshCycle) {
         boolean dataEnabledVisible = mDataEnabledSupported;
         boolean disableAtLimitVisible = mDisableAtLimitSupported;
+
+        if (dataEnabledVisible &&
+            (TelephonyManager.getDefault().getMultiSimConfiguration()
+                == TelephonyManager.MultiSimVariants.DSDS
+            || TelephonyManager.getDefault().getMultiSimConfiguration()
+                == TelephonyManager.MultiSimVariants.TSTS) &&
+            (!mTabHost.getCurrentTabTag().equals(getSubTag(
+                SubscriptionManager.from(getActivity()).getDefaultDataPhoneId()+1)))
+        ) {
+            dataEnabledVisible = false;
+        }
 
         if (isAppDetailMode()) {
             dataEnabledVisible = false;
@@ -2547,9 +2570,19 @@ public class DataUsageSummary extends HighlightingFragment implements Indexable 
     private String getSubTitle(int i) {
         if (i <= 0) {
             return "";
-        } else {
-            return getText(R.string.data_usage_tab_slot).toString() + i;
         }
+
+        // i-1 is supposed to be the phoneId
+        int[] subIds = SubscriptionManager.getSubId(i - 1);
+        SubscriptionManager subMgr = SubscriptionManager.from(getActivity());
+        for (int pos = 0; pos < subIds.length; pos++) {
+            SubscriptionInfo info = subMgr.getActiveSubscriptionInfo(subIds[pos]);
+            if (info != null && !TextUtils.isEmpty(info.getDisplayName())) {
+                return info.getDisplayName().toString();
+            }
+        }
+
+        return getString(R.string.data_usage_tab_slot, i);
     }
 
     // Get current sub from the tab name.

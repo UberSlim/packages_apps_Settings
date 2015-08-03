@@ -16,17 +16,10 @@
 
 package com.android.settings.sim;
 
-import android.provider.SearchIndexableResource;
-
-import com.android.settings.R;
-
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.content.Intent;
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,29 +27,23 @@ import android.os.SystemProperties;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.provider.SearchIndexableResource;
 import android.provider.Settings.SettingNotFoundException;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
-import android.telecom.PhoneAccount;
-import android.telephony.CellInfo;
 import android.telephony.PhoneStateListener;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.TelephonyIntents;
+import com.android.settings.R;
 import com.android.settings.RestrictedSettingsFragment;
 import com.android.settings.Utils;
 import com.android.settings.notification.DropDownPreference;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.search.Indexable;
-import com.android.settings.search.Indexable.SearchIndexProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +57,6 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
 
     private static final String DISALLOW_CONFIG_SIM = "no_config_sim";
     private static final String SIM_ENABLER_CATEGORY = "sim_enablers";
-    private static final String SIM_CARD_CATEGORY = "sim_cards";
     private static final String SIM_ACTIVITIES_CATEGORY = "sim_activities";
     private static final String KEY_CELLULAR_DATA = "sim_cellular_data";
     private static final String KEY_CALLS = "sim_calls";
@@ -116,7 +102,7 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
     public void onCreate(final Bundle bundle) {
         super.onCreate(bundle);
         Log.d(TAG,"on onCreate");
-        
+
         mSubscriptionManager = SubscriptionManager.from(getActivity());
         final TelephonyManager tm =
                     (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
@@ -199,7 +185,6 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
         addPreferencesFromResource(R.xml.sim_settings);
 
         mPrimarySubSelect = (Preference) findPreference(KEY_PRIMARY_SUB_SELECT);
-        final PreferenceCategory simCards = (PreferenceCategory)findPreference(SIM_CARD_CATEGORY);
         final PreferenceCategory simEnablers =
                 (PreferenceCategory)findPreference(SIM_ENABLER_CATEGORY);
 
@@ -207,7 +192,6 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
         mSimEnablers = new ArrayList<MultiSimEnablerPreference>(mNumSlots);
         for (int i = 0; i < mNumSlots; ++i) {
             final SubscriptionInfo sir = findRecordBySlotId(i);
-            simCards.addPreference(new SimPreference(getActivity(), sir, i));
             if (mNumSlots > 1) {
                 mSimEnablers.add(i, new MultiSimEnablerPreference(
                         getActivity(), sir, mHandler, i));
@@ -226,7 +210,6 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
     private void updateAllOptions() {
         Log.d(TAG,"updateAllOptions");
         mSubInfoList = mSubscriptionManager.getActiveSubscriptionInfoList();
-        updateSimSlotValues();
         updateActivitesCategory();
         updateSimEnablers();
     }
@@ -257,18 +240,6 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
             }
         };
         return mPhoneStateListener[phoneId];
-    }
-
-    private void updateSimSlotValues() {
-        final PreferenceScreen prefScreen = getPreferenceScreen();
-
-        final int prefSize = prefScreen.getPreferenceCount();
-        for (int i = 0; i < prefSize; ++i) {
-            Preference pref = prefScreen.getPreference(i);
-            if (pref instanceof SimPreference) {
-                ((SimPreference)pref).update();
-            }
-        }
     }
 
     private void updateActivitesCategory() {
@@ -454,12 +425,11 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
     @Override
     public boolean onPreferenceTreeClick(final PreferenceScreen preferenceScreen,
             final Preference preference) {
-        if (preference instanceof SimPreference) {
-            ((SimPreference) preference).createEditDialog((SimPreference) preference);
-        } else if (preference == mPrimarySubSelect) {
+        if (preference instanceof MultiSimEnablerPreference) {
+            ((MultiSimEnablerPreference) preference).createEditDialog();
+        }  else if (preference == mPrimarySubSelect) {
             startActivity(mPrimarySubSelect.getIntent());
         }
-
         return true;
     }
 
@@ -475,7 +445,7 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
         }
         simPref.clearItems();
 
-        //Get num of activated Subs
+        // Get num of activated Subs if mSubInfoList is not null
         if (mSubInfoList != null) {
             for (SubscriptionInfo subInfo : mSubInfoList) {
                 if (subInfo != null && subInfo.mStatus == mSubscriptionManager.ACTIVE) mActCount++;
@@ -544,85 +514,6 @@ public class SimSettings extends RestrictedSettingsFragment implements Indexable
         }
 
         updateActivitesCategory();
-    }
-
-    private class SimPreference extends Preference{
-        private SubscriptionInfo mSubscriptionInfo;
-        private int mSlotId;
-
-        public SimPreference(Context context, SubscriptionInfo subInfoRecord, int slotId) {
-            super(context);
-
-            mSubscriptionInfo = subInfoRecord;
-            mSlotId = slotId;
-            setKey("sim" + mSlotId);
-            update();
-        }
-
-        public void update() {
-            final Resources res = getResources();
-
-            setTitle(res.getString(R.string.sim_card_number_title, mSlotId + 1));
-            if (mSubscriptionInfo != null) {
-                setSummary(res.getString(R.string.sim_settings_summary,
-                            mSubscriptionInfo.getDisplayName(), mSubscriptionInfo.getNumber()));
-                setEnabled(true);
-            } else {
-                setSummary(R.string.sim_slot_empty);
-                setFragment(null);
-                setEnabled(false);
-            }
-        }
-
-        public void createEditDialog(SimPreference simPref) {
-            final Resources res = getResources();
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            final View dialogLayout = getActivity().getLayoutInflater().inflate(
-                    R.layout.multi_sim_dialog, null);
-            builder.setView(dialogLayout);
-
-            EditText nameText = (EditText)dialogLayout.findViewById(R.id.sim_name);
-            nameText.setText(mSubscriptionInfo.getDisplayName());
-
-            TextView numberView = (TextView)dialogLayout.findViewById(R.id.number);
-            numberView.setText(mSubscriptionInfo.getNumber());
-
-            TextView carrierView = (TextView)dialogLayout.findViewById(R.id.carrier);
-            carrierView.setText(mSubscriptionInfo.getCarrierName());
-
-             builder.setTitle(String.format(res.getString(R.string.sim_editor_title),
-                    (mSlotId)));
-
-            builder.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    final EditText nameText = (EditText)dialogLayout.findViewById(R.id.sim_name);
-
-                    String displayName = nameText.getText().toString();
-                    int subId = mSubscriptionInfo.getSubscriptionId();
-                    mSubscriptionInfo.setDisplayName(displayName);
-                    mSubscriptionManager.setDisplayName(
-                            displayName,
-                            subId,
-                            SubscriptionManager.NAME_SOURCE_USER_INPUT);
-                    findRecordBySubId(subId).setDisplayName(displayName);
-
-                    updateAllOptions();
-                    update();
-                }
-            });
-
-            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    dialog.dismiss();
-                }
-            });
-
-            builder.create().show();
-        }
     }
 
     /**

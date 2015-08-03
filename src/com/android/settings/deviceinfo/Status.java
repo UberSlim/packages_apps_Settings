@@ -45,6 +45,7 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
+import android.telephony.SubscriptionManager;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,6 +57,7 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.PhoneStateIntentReceiver;
+import com.android.internal.telephony.SubscriptionController;
 import com.android.internal.util.ArrayUtils;
 import com.android.settings.R;
 import com.android.settings.SelectSubscription;
@@ -307,6 +309,11 @@ public class Status extends PreferenceActivity {
                 removePreferenceFromScreen(key);
             }
         } else {
+            if (SubscriptionController.getInstance().getActiveSubInfoCount() == 0) {
+                for (String key : PHONE_RELATED_ENTRIES) {
+                    removePreferenceFromScreen(key);
+                }
+            }
             // NOTE "imei" is the "Device ID" since it represents
             //  the IMEI in GSM and the MEID in CDMA
             if (mPhone.getPhoneName().equals("CDMA")) {
@@ -415,7 +422,7 @@ public class Status extends PreferenceActivity {
             Intent intent = selectSub.getIntent();
             intent.putExtra(SelectSubscription.PACKAGE, "com.android.settings");
             intent.putExtra(SelectSubscription.TARGET_CLASS,
-                    "com.android.settings.deviceinfo.MSimSubscriptionStatus");
+                    "com.android.settings.deviceinfo.msim.MSimSubscriptionStatus");
         }
     }
 
@@ -666,7 +673,7 @@ public class Status extends PreferenceActivity {
     }
 
     private boolean isMultiSimEnabled() {
-        return (TelephonyManager.getDefault().getPhoneCount() > 1);
+        return (SubscriptionController.getInstance().getActiveSubInfoCount() > 1);
     }
 
     @Override
