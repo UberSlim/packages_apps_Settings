@@ -234,7 +234,7 @@ public class NotificationSettings extends SettingsPreferenceFragment implements 
         for (VolumeSeekBarPreference volumePref : mVolumePrefs) {
             volumePref.onActivityResume();
         }
-    }
+	}
 
     @Override
     public void onPause() {
