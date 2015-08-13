@@ -1558,4 +1558,8 @@
     <!-- WiFi auto-configure priorities -->
     <string name="wifi_auto_config_priorities">Automatic priority</string>
 
+    <!-- Three-finger-swipe to screenshot -->
+    <string name="three_finger_gesture">Three finger gesture</string>
+    <string name="three_finger_gesture_summary">Swipe three fingers to screenshot</string>
+
 </resources>
