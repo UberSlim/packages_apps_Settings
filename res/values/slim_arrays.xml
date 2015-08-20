@@ -1142,6 +1142,7 @@
         <item>1000</item>
         <item>1500</item>
         <item>2000</item>
+    </string-array>
 
     <!-- WiFi country code -->
     <string-array name="wifi_country_code_entries">
